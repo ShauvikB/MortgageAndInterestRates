@@ -1,13 +1,13 @@
-package nl.ing.assessment.mortgage;
+package nl.ing.assessment;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MortgageApplication {
+public class MortgageAndInterestRatesApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MortgageApplication.class, args);
+		SpringApplication.run(MortgageAndInterestRatesApplication.class, args);
 	}
 
 }
