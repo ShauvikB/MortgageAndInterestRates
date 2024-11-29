@@ -41,23 +41,23 @@ Where:
 Api Details 
 ************
 
-Get Interest Rates
-*******************
-url - api/interest-rates
+    Get Interest Rates
+    *******************
+    url - api/interest-rates
 
-Request Body - Blank
+    Request Body - Blank
 
 
-Mortgage Check
-***************
-url - api/mortgage-check
+    Mortgage Check
+    ***************
+    url - api/mortgage-check
 
-Request Body - 
+    Request Body - 
 
-{
-  "income": 30000,
-  "maturityPeriod": 20,
-  "loanValue": "5000000",
-  "homeValue": "50000"
-}
+    {
+      "income": 30000,
+      "maturityPeriod": 20,
+      "loanValue": "5000000",
+      "homeValue": "50000"
+    }
 
