@@ -60,7 +60,7 @@ public class MortgageAndInterestRatesService {
      */
     private BigDecimal calculateMonthlyCost(BigDecimal loanValue, int maturityPeriod)  {
         log.info("Calculating monthly cost for loan value: {} and maturity period: {}", loanValue, maturityPeriod);
-        BigDecimal interestRate = null;
+        BigDecimal interestRate;
         try {
             interestRate = mortgageAndInterestRatesUtil.getInterestRateForMaturityPeriod(maturityPeriod);
             log.info("Interest rate for maturity period: {} is: {}", maturityPeriod, interestRate);
