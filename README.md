@@ -44,12 +44,15 @@ Api Details
 Get Interest Rates
 *******************
 url - api/interest-rates
+
 Request Body - Blank
 
 Mortgage Check
 ***************
 url - api/mortgage-check
+
 Request Body - 
+
 {
   "income": 30000,
   "maturityPeriod": 20,
