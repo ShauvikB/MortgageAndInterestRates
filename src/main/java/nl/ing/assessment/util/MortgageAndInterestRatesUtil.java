@@ -4,13 +4,13 @@ import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import nl.ing.assessment.config.InterestRatesProperties;
 import nl.ing.assessment.exception.MortgageAndInterestRatesException;
 import nl.ing.assessment.interest.model.InterestRate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,6 +20,9 @@ import java.util.Objects;
 @Slf4j
 public class MortgageAndInterestRatesUtil {
 
+    @Autowired
+    private InterestRatesProperties interestRatesProperties;
+
     private List<InterestRate> interestRates;
 
     /**
@@ -28,10 +31,7 @@ public class MortgageAndInterestRatesUtil {
     @PostConstruct
     public void loadInterestRates() {
         log.info("Initializing interest rates");
-        interestRates = new ArrayList<>();
-        interestRates.add(new InterestRate(10, new BigDecimal("3.0"), new Timestamp(System.currentTimeMillis())));
-        interestRates.add(new InterestRate(20, new BigDecimal("3.5"), new Timestamp(System.currentTimeMillis())));
-        interestRates.add(new InterestRate(30, new BigDecimal("4.0"), new Timestamp(System.currentTimeMillis())));
+        interestRates = interestRatesProperties.toInterestRates();
     }
 
     /**
