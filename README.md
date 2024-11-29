@@ -37,4 +37,23 @@ Where:
             Interest rate is usually in percentage form, so we need to divide it by 100 to get the decimal form.
             The monthly interest rate decimal is the annual interest rate decimal divided by 12.
          n: Total number of payments (years * 12).
+         
+Api Details 
+************
+
+Get Interest Rates
+*******************
+url - api/interest-rates
+Request Body - Blank
+
+Mortgage Check
+***************
+url - api/mortgage-check
+Request Body - 
+{
+  "income": 30000,
+  "maturityPeriod": 20,
+  "loanValue": "5000000",
+  "homeValue": "50000"
+}
 
