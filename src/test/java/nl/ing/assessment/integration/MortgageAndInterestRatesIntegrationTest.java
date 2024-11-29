@@ -29,7 +29,43 @@ public class MortgageAndInterestRatesIntegrationTest {
     @Test
     public void testCheckMortgage() throws Exception {
         String requestJson = "{\"loanValue\":10000,\"maturityPeriod\":10,\"income\":30000,\"homeValue\":50000}";
-        String responseJson = "{\"feasible\":true,\"monthlyCost\":96.56}";
+        String responseJson = "{\"feasible\":true,\"monthlyCost\":96.56,\"error\":\"\"}";
+
+        mockMvc.perform(post("/api/mortgage-check")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isOk())
+                .andExpect(content().json(responseJson));
+    }
+
+    @Test
+    public void testCheckMortgage_NofeasilibiltyLoanMoreThanHome() throws Exception {
+        String requestJson = "{\"loanValue\":100000,\"maturityPeriod\":10,\"income\":30000,\"homeValue\":2000}";
+        String responseJson = "{\"feasible\":false,\"monthlyCost\":0,\"error\":\"A Mortgage cannot be more than the home value\"}";
+
+        mockMvc.perform(post("/api/mortgage-check")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isOk())
+                .andExpect(content().json(responseJson));
+    }
+
+    @Test
+    public void testCheckMortgage_NofeasilibiltyLoanMoreThanIncome() throws Exception {
+        String requestJson = "{\"loanValue\":100000,\"maturityPeriod\":10,\"income\":3000,\"homeValue\":2000000}";
+        String responseJson = "{\"feasible\":false,\"monthlyCost\":0,\"error\":\"A Mortgage cannot be more than 4 times the income\"}";
+
+        mockMvc.perform(post("/api/mortgage-check")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isOk())
+                .andExpect(content().json(responseJson));
+    }
+
+    @Test
+    public void testCheckMortgage_NoInterestRateFoundForMaturity() throws Exception {
+        String requestJson = "{\"loanValue\":10000,\"maturityPeriod\":50,\"income\":30000,\"homeValue\":50000}";
+        String responseJson = "{\"feasible\":false,\"monthlyCost\":0,\"error\":\"No interest rate found for maturity period: 50\"}";
 
         mockMvc.perform(post("/api/mortgage-check")
                         .contentType(MediaType.APPLICATION_JSON)

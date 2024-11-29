@@ -40,12 +40,17 @@ public class MortgageAndInterestRatesService {
         // a mortgage should not exceed 4 times the income and the loan value should not exceed the home value
         BigDecimal maxLoanValue = request.income().multiply(BigDecimal.valueOf(4));
         log.info("Max loan value: {}", maxLoanValue);
-        boolean feasible = request.loanValue().compareTo(maxLoanValue) <= 0 &&
-                request.loanValue().compareTo(request.homeValue()) <= 0;
+        if (request.loanValue().compareTo(maxLoanValue) > 0 ) {
+            return new MortgageResponse(false, BigDecimal.ZERO, "A Mortgage cannot be more than 4 times the income");
+        } else if (request.loanValue().compareTo(request.homeValue()) > 0) {
+            return new MortgageResponse(false, BigDecimal.ZERO, "A Mortgage cannot be more than the home value");
+        }
 
         BigDecimal monthlyCost = calculateMonthlyCost(request.loanValue(), request.maturityPeriod());
-
-        MortgageResponse response = new MortgageResponse(feasible, monthlyCost);
+        if (monthlyCost.compareTo(BigDecimal.ZERO) < 0) {
+            return new MortgageResponse(false, BigDecimal.ZERO, "No interest rate found for maturity period: " + request.maturityPeriod());
+        }
+        MortgageResponse response = new MortgageResponse(true, monthlyCost, "");
         log.info("Mortgage feasibility check result: {}", response);
         return response;
     }
@@ -66,20 +71,20 @@ public class MortgageAndInterestRatesService {
             log.info("Interest rate for maturity period: {} is: {}", maturityPeriod, interestRate);
         } catch (MortgageAndInterestRatesException e) {
             log.error("Error getting interest rate for maturity period: {}", maturityPeriod, e);
-            return BigDecimal.ZERO;
+            return BigDecimal.valueOf(-1);
         }
 
-        /**
-         * The formula to calculate the monthly cost of a loan is:
-         * M = P[r(1+r)^n]/[(1+r)^n-1]
-         * Where:   M: Monthly mortgage payment.
-         *          P: Loan value (principal).
-         *          r: Monthly interest rate percentage (annual interest rate  / (12 * 100))
-         *             Interest rate is usually in percentage form, so we need to divide it by 100 to get the decimal form.
-         *             The monthly interest rate decimal is the annual interest rate decimal divided by 12.
-         *          n: Total number of payments (years * 12).
-         *
-         **/
+        /*
+          The formula to calculate the monthly cost of a loan is:
+          M = P[r(1+r)^n]/[(1+r)^n-1]
+          Where:   M: Monthly mortgage payment.
+                   P: Loan value (principal).
+                   r: Monthly interest rate percentage (annual interest rate  / (12 * 100))
+                      Interest rate is usually in percentage form, so we need to divide it by 100 to get the decimal form.
+                      The monthly interest rate decimal is the annual interest rate decimal divided by 12.
+                   n: Total number of payments (years * 12).
+
+         */
 
         BigDecimal monthlyInterestRate =  interestRate.divide(BigDecimal.valueOf(12 * 100), 10,  RoundingMode.HALF_UP);
         log.info("Monthly interest rate: {}", monthlyInterestRate);
