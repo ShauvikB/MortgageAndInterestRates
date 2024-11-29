@@ -37,12 +37,14 @@ public class MortgageAndInterestRatesService {
 
     public MortgageResponse checkMortgage(MortgageRequest request)  {
         log.info("Checking mortgage feasibility for request: {}", request);
-        // a mortgage should not exceed 4 times the income and the loan value should not exceed the home value
+
         BigDecimal maxLoanValue = request.income().multiply(BigDecimal.valueOf(4));
         log.info("Max loan value: {}", maxLoanValue);
         if (request.loanValue().compareTo(maxLoanValue) > 0 ) {
+            log.info("Loan value is more than 4 times the income");
             return new MortgageResponse(false, BigDecimal.ZERO, "A Mortgage cannot be more than 4 times the income");
         } else if (request.loanValue().compareTo(request.homeValue()) > 0) {
+            log.info("Loan value is more than the home value");
             return new MortgageResponse(false, BigDecimal.ZERO, "A Mortgage cannot be more than the home value");
         }
 
