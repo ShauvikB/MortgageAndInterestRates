@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Service
@@ -68,6 +69,37 @@ public class MortgageAndInterestRatesService {
             return BigDecimal.ZERO;
         }
 
-       return null;
+        /**
+         * The formula to calculate the monthly cost of a loan is:
+         * M = P[r(1+r)^n]/[(1+r)^n-1]
+         * Where:   M: Monthly mortgage payment.
+         *          P: Loan value (principal).
+         *          r: Monthly interest rate percentage (annual interest rate  / (12 * 100))
+         *             Interest rate is usually in percentage form, so we need to divide it by 100 to get the decimal form.
+         *             The monthly interest rate decimal is the annual interest rate decimal divided by 12.
+         *          n: Total number of payments (years * 12).
+         *
+         **/
+
+        BigDecimal monthlyInterestRate =  interestRate.divide(BigDecimal.valueOf(12 * 100), 10,  RoundingMode.HALF_UP);
+        log.info("Monthly interest rate: {}", monthlyInterestRate);
+
+        int totalPayments = maturityPeriod * 12;
+        log.info("Total payments: {}", totalPayments);
+
+        BigDecimal mnthlyIntrstPlusOnePowTotMnths = monthlyInterestRate.add(BigDecimal.ONE).pow(totalPayments);
+        log.info("Monthly interest rate plus one to the power of total months: {}", mnthlyIntrstPlusOnePowTotMnths);
+
+        BigDecimal numerator = monthlyInterestRate.multiply(mnthlyIntrstPlusOnePowTotMnths);
+        log.info("Numerator: {}", numerator);
+
+        BigDecimal denominator = mnthlyIntrstPlusOnePowTotMnths.subtract(BigDecimal.ONE);
+        log.info("Denominator: {}", denominator);
+
+        BigDecimal monthlyCost = loanValue.multiply(numerator.divide(denominator,  RoundingMode.HALF_UP));
+        log.info("Monthly cost: {}", monthlyCost);
+        monthlyCost = monthlyCost.setScale(2, RoundingMode.HALF_UP);
+
+        return monthlyCost;
     }
 }
