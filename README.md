@@ -16,7 +16,14 @@ Business rules that apply are
 - a mortgage does not exceed 4 times the income
 - a mortgage does not exceed the home value
 
-If maturityPeriod provided does not match with any of the respective interest rates then business validation returns monthly cost as 0.
+Business Validations Added
+****************************
+A String type error is added to mortgage response along with A Mortgage cannot be more than 4 times the income. This is for end user to determine why a mortgage is not feasible.
+- If a mortgage exceeds 4 times the income
+  error message of response is be populated with "A Mortgage cannot be more than 4 times the income"
+- If a mortgage exceeds the home value
+- error message of response is be populated with "A Mortgage cannot be more than the home value"
+If maturityPeriod provided does not match with any of the respective interest rates then business validation returns feasibility as false, monthly cost as 0 and error message as "No interest rate found for maturity period: [Maturity Period]".
 
 The formula used to calculate the monthly cost of a loan is:
 
