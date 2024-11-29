@@ -13,7 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -37,7 +37,7 @@ public class MortgageAndInterestRatesServiceTest {
 
         MortgageResponse response = mortgageAndInterestRatesService.checkMortgage(request);
 
-        assertEquals(true, response.feasible());
+        assertTrue(response.feasible());
         assertEquals(new BigDecimal("276.04"), response.monthlyCost());
     }
 
@@ -47,7 +47,7 @@ public class MortgageAndInterestRatesServiceTest {
 
         MortgageResponse response = mortgageAndInterestRatesService.checkMortgage(request);
 
-        assertEquals(false, response.feasible());
+        assertFalse(response.feasible());
         assertEquals(new BigDecimal("0"), response.monthlyCost());
         assertEquals("A Mortgage cannot be more than 4 times the income", response.error());
     }
@@ -58,7 +58,7 @@ public class MortgageAndInterestRatesServiceTest {
 
         MortgageResponse response = mortgageAndInterestRatesService.checkMortgage(request);
 
-        assertEquals(false, response.feasible());
+        assertFalse(response.feasible());
         assertEquals(new BigDecimal("0"), response.monthlyCost());
         assertEquals("A Mortgage cannot be more than the home value", response.error());
     }
@@ -70,7 +70,7 @@ public class MortgageAndInterestRatesServiceTest {
 
         MortgageResponse response = mortgageAndInterestRatesService.checkMortgage(request);
 
-        assertEquals(false, response.feasible());
+        assertFalse(response.feasible());
         assertEquals(BigDecimal.ZERO, response.monthlyCost());
         assertEquals("No interest rate found for maturity period: 10", response.error());
     }
