@@ -33,6 +33,7 @@ A String type error field is added to mortgage response along with A Mortgage ca
 - If maturityPeriod provided does not have any respective interest rates
   The response has error message "No interest rate found for maturity period: [Maturity Period]", feasibale false, monthlyCost as 0
 
+# Monthly Cose Calculation
 The formula used to calculate the monthly cost of a loan is:
 
  M = P[r(1+r)^n]/[(1+r)^n-1]
