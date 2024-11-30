@@ -73,4 +73,53 @@ public class MortgageAndInterestRatesIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(responseJson));
     }
+
+    @Test
+    public void testCheckMortgage_IncomeIsZero() throws Exception {
+        String requestJson = "{\"loanValue\":10000,\"maturityPeriod\":50,\"income\":0,\"homeValue\":50000}";
+        String responseJson = "{\"feasible\":false,\"monthlyCost\":0,\"error\":\"An income must be greater than zero\"}";
+
+        mockMvc.perform(post("/api/mortgage-check")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isOk())
+                .andExpect(content().json(responseJson));
+    }
+
+    @Test
+    public void testCheckMortgage_LoanIsZero() throws Exception {
+        String requestJson = "{\"loanValue\":0,\"maturityPeriod\":50,\"income\":2000,\"homeValue\":50000}";
+        String responseJson = "{\"feasible\":false,\"monthlyCost\":0,\"error\":\"A loan value must be greater than zero\"}";
+
+        mockMvc.perform(post("/api/mortgage-check")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isOk())
+                .andExpect(content().json(responseJson));
+    }
+
+    @Test
+    public void testCheckMortgage_HomeValueIsZero() throws Exception {
+        String requestJson = "{\"loanValue\":200000,\"maturityPeriod\":50,\"income\":2000,\"homeValue\":0}";
+        String responseJson = "{\"feasible\":false,\"monthlyCost\":0,\"error\":\"A home value must be greater than zero\"}";
+
+        mockMvc.perform(post("/api/mortgage-check")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isOk())
+                .andExpect(content().json(responseJson));
+    }
+
+    @Test
+    public void testCheckMortgage_MaturityPeriodIsZero() throws Exception {
+        String requestJson = "{\"loanValue\":200000,\"maturityPeriod\":0,\"income\":2000,\"homeValue\":600000}";
+        String responseJson = "{\"feasible\":false,\"monthlyCost\":0,\"error\":\"A maturity period must be greater than zero\"}";
+
+        mockMvc.perform(post("/api/mortgage-check")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isOk())
+                .andExpect(content().json(responseJson));
+    }
 }
+
