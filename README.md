@@ -16,8 +16,7 @@ Business rules that apply are
 - a mortgage does not exceed 4 times the income
 - a mortgage does not exceed the home value
 
-Business Validations Added
-****************************
+# Business Validations Added
 A String type error is added to mortgage response along with A Mortgage cannot be more than 4 times the income. This is for end user to determine why a mortgage is not feasible.
 - If a mortgage exceeds 4 times the income
    The response has error message "A Mortgage cannot be more than 4 times the income", feasibale false, monthlyCost as 0
@@ -47,9 +46,7 @@ Where:
             The monthly interest rate decimal is the annual interest rate decimal divided by 12.
          n: Total number of payments (years * 12).
          
-Api Details 
-************
-
+# Api Details 
     Get Interest Rates
     *******************
     url - api/interest-rates
