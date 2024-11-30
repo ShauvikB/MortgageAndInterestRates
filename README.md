@@ -16,14 +16,22 @@ Business rules that apply are
 - a mortgage does not exceed 4 times the income
 - a mortgage does not exceed the home value
 
-Business Validations Added
-****************************
+# Business Validations Added
 A String type error is added to mortgage response along with A Mortgage cannot be more than 4 times the income. This is for end user to determine why a mortgage is not feasible.
 - If a mortgage exceeds 4 times the income
-  error message of response is be populated with "A Mortgage cannot be more than 4 times the income"
+   The response has error message "A Mortgage cannot be more than 4 times the income", feasibale false, monthlyCost as 0
 - If a mortgage exceeds the home value
-- error message of response is be populated with "A Mortgage cannot be more than the home value"
-If maturityPeriod provided does not match with any of the respective interest rates then business validation returns feasibility as false, monthly cost as 0 and error message as "No interest rate found for maturity period: [Maturity Period]".
+  The response has error message "A Mortgage cannot be more than the home value", feasibale false, monthlyCost as 0
+- if loan value is 0 or less than 0
+  The response has error message "A loan value must be greater than zero", feasibale false, monthlyCost as 0
+- If Imcome is 0 or less than 0
+  The response has error message "An income must be greater than zero", feasibale false, monthlyCost as 0
+- If home value is 0 or less than 0
+  The response has error message "A home value must be greater than zero", feasibale false, monthlyCost as 0
+- If maturity period is 0 or less than 0
+  The response has error message "A maturity period must be greater than zero", feasibale false, monthlyCost as 0
+- If maturityPeriod provided does not have any respective interest rates
+  The response has error message "No interest rate found for maturity period: [Maturity Period]", feasibale false, monthlyCost as 0
 
 The formula used to calculate the monthly cost of a loan is:
 
@@ -38,9 +46,7 @@ Where:
             The monthly interest rate decimal is the annual interest rate decimal divided by 12.
          n: Total number of payments (years * 12).
          
-Api Details 
-************
-
+# Api Details 
     Get Interest Rates
     *******************
     url - api/interest-rates
