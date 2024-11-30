@@ -8,7 +8,7 @@ Contains the following endpoints;
 
 The list of current mortgage rates is created in memory on application startup.
 The mortgage rate object contains the fields; maturityPeriod (integer), interestRate (Percentage) and lastUpdate (Timestamp)
-The posted data for the mortgage check contains at least the fields; income (Amount), maturityPeriod (integer), loanValue (Amount), homeValue (Amount).
+The posted data for the mortgage check contains the fields; income (Amount), maturityPeriod (integer), loanValue (Amount), homeValue (Amount).
 
 The mortgage check return if the mortgage is feasible (boolean) and the
 montly costs (Amount) of the mortgage.
