@@ -25,7 +25,7 @@ public class InterestRatesProperties {
         private BigDecimal rate;
     }
 
-    public List<InterestRate> toInterestRates() {
+    public List<InterestRate> populateInterestRates() {
         return rates.stream()
                 .map(interestRateValue -> new InterestRate(interestRateValue.getMaturityPeriod(), interestRateValue.getRate(), new Timestamp(System.currentTimeMillis())))
                 .collect(Collectors.toList());

@@ -31,7 +31,7 @@ public class MortgageAndInterestRatesUtil {
     @PostConstruct
     public void loadInterestRates() {
         log.info("Initializing interest rates");
-        interestRates = interestRatesProperties.toInterestRates();
+        interestRates = interestRatesProperties.populateInterestRates();
     }
 
     /**

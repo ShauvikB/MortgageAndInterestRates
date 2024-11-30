@@ -43,8 +43,7 @@ public class MortgageAndInterestRatesService {
         log.info("Checking mortgage feasibility for request: {}", request);
         try {
             mortgageAndInterestRatesValidator.validateMortgageDetails(request);
-            BigDecimal  monthlyCost = calculateMonthlyCost(request.loanValue(), request.maturityPeriod());
-            return new MortgageResponse(true, monthlyCost, "");
+            return new MortgageResponse(true, calculateMonthlyCost(request.loanValue(), request.maturityPeriod()), "");
         } catch (MortgageAndInterestRatesException e) {
             return new MortgageResponse(false, BigDecimal.ZERO, e.getMessage());
         }
@@ -81,17 +80,11 @@ public class MortgageAndInterestRatesService {
         log.info("Total payments: {}", totalPayments);
 
         BigDecimal mnthlyIntrstPlusOnePowTotMnths = monthlyInterestRate.add(BigDecimal.ONE).pow(totalPayments);
-        log.info("Monthly interest rate plus one to the power of total months: {}", mnthlyIntrstPlusOnePowTotMnths);
-
         BigDecimal numerator = monthlyInterestRate.multiply(mnthlyIntrstPlusOnePowTotMnths);
-        log.info("Numerator: {}", numerator);
-
         BigDecimal denominator = mnthlyIntrstPlusOnePowTotMnths.subtract(BigDecimal.ONE);
-        log.info("Denominator: {}", denominator);
 
-        BigDecimal monthlyCost = loanValue.multiply(numerator.divide(denominator,  RoundingMode.HALF_UP));
+        BigDecimal monthlyCost = loanValue.multiply(numerator.divide(denominator,  RoundingMode.HALF_UP)).setScale(2, RoundingMode.HALF_UP);
         log.info("Monthly cost: {}", monthlyCost);
-        monthlyCost = monthlyCost.setScale(2, RoundingMode.HALF_UP);
 
         return monthlyCost;
     }
