@@ -50,6 +50,7 @@ Where:
 # Api Details 
     Get Interest Rates
     *******************
+    Http Method - GET
     url - api/interest-rates
 
     Request Body - Blank
@@ -57,6 +58,7 @@ Where:
 
     Mortgage Check
     ***************
+    Http Method - POST
     url - api/mortgage-check
 
     Request Body - 
