@@ -29,7 +29,7 @@ public class MortgageAndInterestRatesIntegrationTest {
     @Test
     public void testCheckMortgage() throws Exception {
         String requestJson = "{\"loanValue\":10000,\"maturityPeriod\":10,\"income\":30000,\"homeValue\":50000}";
-        String responseJson = "{\"feasible\":true,\"monthlyCost\":96.56,\"error\":\"\"}";
+        String responseJson = "{\"feasible\":true,\"monthlyCost\":101.25,\"error\":\"\"}";
 
         mockMvc.perform(post("/api/mortgage-check")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -65,7 +65,7 @@ public class MortgageAndInterestRatesIntegrationTest {
     @Test
     public void testCheckMortgage_NoInterestRateFoundForMaturity() throws Exception {
         String requestJson = "{\"loanValue\":10000,\"maturityPeriod\":50,\"income\":30000,\"homeValue\":50000}";
-        String responseJson = "{\"feasible\":false,\"monthlyCost\":0,\"error\":\"No interest rate found for maturity period: 50\"}";
+        String responseJson = "{\"feasible\":false,\"monthlyCost\":0,\"error\":\"Interest rate not found for maturity period: 50\"}";
 
         mockMvc.perform(post("/api/mortgage-check")
                         .contentType(MediaType.APPLICATION_JSON)

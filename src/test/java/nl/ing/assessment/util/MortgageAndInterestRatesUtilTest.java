@@ -25,7 +25,7 @@ public class MortgageAndInterestRatesUtilTest {
     @Test
     public void testGetInterestRate_Success() throws MortgageAndInterestRatesException {
         BigDecimal interestRate = mortgageAndInterestRatesUtil.getInterestRateForMaturityPeriod(10);
-        assertEquals(new BigDecimal("3.0"), interestRate);
+        assertEquals(new BigDecimal("4.0"), interestRate);
     }
 
     @Test

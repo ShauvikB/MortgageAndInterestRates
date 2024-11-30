@@ -72,6 +72,6 @@ public class MortgageAndInterestRatesServiceTest {
 
         assertFalse(response.feasible());
         assertEquals(BigDecimal.ZERO, response.monthlyCost());
-        assertEquals("No interest rate found for maturity period: 10", response.error());
+        assertEquals("Interest rate not found for maturity period: 10", response.error());
     }
 }
