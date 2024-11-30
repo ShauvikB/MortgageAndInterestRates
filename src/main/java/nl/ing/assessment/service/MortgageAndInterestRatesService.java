@@ -9,6 +9,7 @@ import nl.ing.assessment.interest.model.InterestRate;
 import nl.ing.assessment.mortgage.request.MortgageRequest;
 import nl.ing.assessment.mortgage.response.MortgageResponse;
 import nl.ing.assessment.util.MortgageAndInterestRatesUtil;
+import nl.ing.assessment.validate.MortgageAndInterestRatesValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,9 @@ public class MortgageAndInterestRatesService {
     @Autowired
     private MortgageAndInterestRatesUtil mortgageAndInterestRatesUtil;
 
+    @Autowired
+    private MortgageAndInterestRatesValidator mortgageAndInterestRatesValidator;
+
     /**
      * Get all interest rates
      *
@@ -37,24 +41,13 @@ public class MortgageAndInterestRatesService {
 
     public MortgageResponse checkMortgage(MortgageRequest request)  {
         log.info("Checking mortgage feasibility for request: {}", request);
-
-        BigDecimal maxLoanValue = request.income().multiply(BigDecimal.valueOf(4));
-        log.info("Max loan value: {}", maxLoanValue);
-        if (request.loanValue().compareTo(maxLoanValue) > 0 ) {
-            log.info("Loan value is more than 4 times the income");
-            return new MortgageResponse(false, BigDecimal.ZERO, "A Mortgage cannot be more than 4 times the income");
-        } else if (request.loanValue().compareTo(request.homeValue()) > 0) {
-            log.info("Loan value is more than the home value");
-            return new MortgageResponse(false, BigDecimal.ZERO, "A Mortgage cannot be more than the home value");
+        try {
+            mortgageAndInterestRatesValidator.validateMortgageDetails(request);
+            BigDecimal  monthlyCost = calculateMonthlyCost(request.loanValue(), request.maturityPeriod());
+            return new MortgageResponse(true, monthlyCost, "");
+        } catch (MortgageAndInterestRatesException e) {
+            return new MortgageResponse(false, BigDecimal.ZERO, e.getMessage());
         }
-
-        BigDecimal monthlyCost = calculateMonthlyCost(request.loanValue(), request.maturityPeriod());
-        if (monthlyCost.compareTo(BigDecimal.ZERO) < 0) {
-            return new MortgageResponse(false, BigDecimal.ZERO, "No interest rate found for maturity period: " + request.maturityPeriod());
-        }
-        MortgageResponse response = new MortgageResponse(true, monthlyCost, "");
-        log.info("Mortgage feasibility check result: {}", response);
-        return response;
     }
 
     /**
@@ -65,16 +58,10 @@ public class MortgageAndInterestRatesService {
      *
      * @return the monthly cost
      */
-    private BigDecimal calculateMonthlyCost(BigDecimal loanValue, int maturityPeriod)  {
+    private BigDecimal calculateMonthlyCost(BigDecimal loanValue, int maturityPeriod) throws MortgageAndInterestRatesException {
         log.info("Calculating monthly cost for loan value: {} and maturity period: {}", loanValue, maturityPeriod);
-        BigDecimal interestRate;
-        try {
-            interestRate = mortgageAndInterestRatesUtil.getInterestRateForMaturityPeriod(maturityPeriod);
-            log.info("Interest rate for maturity period: {} is: {}", maturityPeriod, interestRate);
-        } catch (MortgageAndInterestRatesException e) {
-            log.error("Error getting interest rate for maturity period: {}", maturityPeriod, e);
-            return BigDecimal.valueOf(-1);
-        }
+        BigDecimal interestRate = mortgageAndInterestRatesUtil.getInterestRateForMaturityPeriod(maturityPeriod);
+        log.info("Interest rate for maturity period: {} is: {}", maturityPeriod, interestRate);
 
         /*
           The formula to calculate the monthly cost of a loan is:
