@@ -17,7 +17,7 @@ Business rules that apply are
 - a mortgage does not exceed the home value
 
 # Business Validations Added
-A String type error is added to mortgage response along with A Mortgage cannot be more than 4 times the income. This is for end user to determine why a mortgage is not feasible.
+A String type error field is added to mortgage response along with A Mortgage cannot be more than 4 times the income. This is for end user to determine why a mortgage is not feasible.
 - If a mortgage exceeds 4 times the income
    The response has error message "A Mortgage cannot be more than 4 times the income", feasibale false, monthlyCost as 0
 - If a mortgage exceeds the home value
