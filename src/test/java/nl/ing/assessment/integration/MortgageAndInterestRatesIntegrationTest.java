@@ -40,8 +40,21 @@ public class MortgageAndInterestRatesIntegrationTest {
 
     @Test
     public void testCheckMortgage_NofeasilibiltyLoanMoreThanHome() throws Exception {
-        String requestJson = "{\"loanValue\":100000,\"maturityPeriod\":10,\"income\":30000,\"homeValue\":2000}";
-        String responseJson = "{\"feasible\":false,\"monthlyCost\":0,\"error\":\"A Mortgage cannot be more than the home value\"}";
+        String requestJson = """
+                        {
+                          "income": 30000,
+                          "maturityPeriod": 10,
+                          "loanValue": "100000",
+                          "homeValue": "2000"
+                        }
+                        """;
+        String responseJson =  """
+                        {
+                           "feasible": false,
+                           "monthlyCost": 0,
+                           "error": "A Mortgage cannot be more than the home value"
+                         }
+                      """;
 
         mockMvc.perform(post("/api/mortgage-check")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -52,8 +65,21 @@ public class MortgageAndInterestRatesIntegrationTest {
 
     @Test
     public void testCheckMortgage_NofeasilibiltyLoanMoreThanIncome() throws Exception {
-        String requestJson = "{\"loanValue\":100000,\"maturityPeriod\":10,\"income\":3000,\"homeValue\":2000000}";
-        String responseJson = "{\"feasible\":false,\"monthlyCost\":0,\"error\":\"A Mortgage cannot be more than 4 times the income\"}";
+        String requestJson = """
+                        {
+                          "income": 3000,
+                          "maturityPeriod": 10,
+                          "loanValue": "100000",
+                          "homeValue": "2000000"
+                        }
+                        """;
+        String responseJson =  """
+                        {
+                           "feasible": false,
+                           "monthlyCost": 0,
+                           "error": "A Mortgage cannot be more than 4 times the income"
+                         }
+                      """;
 
         mockMvc.perform(post("/api/mortgage-check")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -64,8 +90,21 @@ public class MortgageAndInterestRatesIntegrationTest {
 
     @Test
     public void testCheckMortgage_NoInterestRateFoundForMaturity() throws Exception {
-        String requestJson = "{\"loanValue\":10000,\"maturityPeriod\":50,\"income\":30000,\"homeValue\":50000}";
-        String responseJson = "{\"feasible\":false,\"monthlyCost\":0,\"error\":\"Interest rate not found for maturity period: 50\"}";
+        String requestJson = """
+                        {
+                          "income": 30000,
+                          "maturityPeriod": 50,
+                          "loanValue": "10000",
+                          "homeValue": "50000"
+                        }
+                        """;
+        String responseJson =  """
+                        {
+                           "feasible": false,
+                           "monthlyCost": 0,
+                           "error": "Interest rate not found for maturity period: 50"
+                         }
+                      """;
 
         mockMvc.perform(post("/api/mortgage-check")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -76,8 +115,21 @@ public class MortgageAndInterestRatesIntegrationTest {
 
     @Test
     public void testCheckMortgage_IncomeIsZero() throws Exception {
-        String requestJson = "{\"loanValue\":10000,\"maturityPeriod\":50,\"income\":0,\"homeValue\":50000}";
-        String responseJson = "{\"feasible\":false,\"monthlyCost\":0,\"error\":\"An income must be greater than zero\"}";
+        String requestJson = """
+                        {
+                          "income": 0,
+                          "maturityPeriod": 50,
+                          "loanValue": "10000",
+                          "homeValue": "50000"
+                        }
+                        """;
+        String responseJson =  """
+                        {
+                           "feasible": false,
+                           "monthlyCost": 0,
+                           "error": "An income must be greater than zero"
+                         }
+                      """;
 
         mockMvc.perform(post("/api/mortgage-check")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -88,8 +140,21 @@ public class MortgageAndInterestRatesIntegrationTest {
 
     @Test
     public void testCheckMortgage_LoanIsZero() throws Exception {
-        String requestJson = "{\"loanValue\":0,\"maturityPeriod\":50,\"income\":2000,\"homeValue\":50000}";
-        String responseJson = "{\"feasible\":false,\"monthlyCost\":0,\"error\":\"A loan value must be greater than zero\"}";
+        String requestJson = """
+                        {
+                          "income": 2000,
+                          "maturityPeriod": 50,
+                          "loanValue": "0",
+                          "homeValue": "50000"
+                        }
+                        """;
+        String responseJson =  """
+                        {
+                           "feasible": false,
+                           "monthlyCost": 0,
+                           "error": "A loan value must be greater than zero"
+                         }
+                      """;
 
         mockMvc.perform(post("/api/mortgage-check")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -100,8 +165,21 @@ public class MortgageAndInterestRatesIntegrationTest {
 
     @Test
     public void testCheckMortgage_HomeValueIsZero() throws Exception {
-        String requestJson = "{\"loanValue\":200000,\"maturityPeriod\":50,\"income\":2000,\"homeValue\":0}";
-        String responseJson = "{\"feasible\":false,\"monthlyCost\":0,\"error\":\"A home value must be greater than zero\"}";
+        String requestJson = """
+                        {
+                          "income": 2000,
+                          "maturityPeriod": 50,
+                          "loanValue": "200000",
+                          "homeValue": "0"
+                        }
+                        """;
+        String responseJson =  """
+                        {
+                           "feasible": false,
+                           "monthlyCost": 0,
+                           "error": "A home value must be greater than zero"
+                         }
+                      """;
 
         mockMvc.perform(post("/api/mortgage-check")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -112,8 +190,21 @@ public class MortgageAndInterestRatesIntegrationTest {
 
     @Test
     public void testCheckMortgage_MaturityPeriodIsZero() throws Exception {
-        String requestJson = "{\"loanValue\":200000,\"maturityPeriod\":0,\"income\":2000,\"homeValue\":600000}";
-        String responseJson = "{\"feasible\":false,\"monthlyCost\":0,\"error\":\"A maturity period must be greater than zero\"}";
+        String requestJson = """
+                        {
+                          "income": 2000,
+                          "maturityPeriod": 0,
+                          "loanValue": "200000",
+                          "homeValue": "600000"
+                        }
+                        """;
+        String responseJson =  """
+                        {
+                           "feasible": false,
+                           "monthlyCost": 0,
+                           "error": "A maturity period must be greater than zero"
+                         }
+                      """;
 
         mockMvc.perform(post("/api/mortgage-check")
                         .contentType(MediaType.APPLICATION_JSON)

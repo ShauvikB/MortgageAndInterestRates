@@ -35,7 +35,14 @@ public class MortgageAndInterestRatesControllerTest {
         Timestamp fixedTimestamp = Timestamp.valueOf("2024-11-29 11:29:07.265");
         InterestRate mockInterestRate = new InterestRate(10, new BigDecimal("3.0"), fixedTimestamp);
         when(mortgageAndInterestRatesService.getAllInterestRates()).thenReturn(java.util.List.of(mockInterestRate));
-        String interestRateJson = "[{\"maturityPeriod\":10,\"interestRate\":3.0,\"lastUpdate\":\"2024-11-29T10:29:07.265+00:00\"}]";
+        String interestRateJson =  """
+                        [{
+                           "maturityPeriod": 10,
+                           "interestRate": 3.0,
+                           "lastUpdate": "2024-11-29T10:29:07.265+00:00"
+                         }]
+                      """;
+
 
         mockMvc.perform(get("/api/interest-rates"))
                 .andExpect(status().isOk())
@@ -47,8 +54,21 @@ public class MortgageAndInterestRatesControllerTest {
         MortgageResponse mockResponse = new MortgageResponse(true, new BigDecimal("96.56"), "");
         when(mortgageAndInterestRatesService.checkMortgage(any(MortgageRequest.class))).thenReturn(mockResponse);
 
-        String requestJson = "{\"loanValue\":10000,\"maturityPeriod\":10,\"income\":30000,\"homeValue\":50000}";
-        String responseJson = "{\"feasible\":true,\"monthlyCost\":96.56,\"error\":\"\"}";
+        String requestJson = """
+                        {
+                          "income": 30000,
+                          "maturityPeriod": 10,
+                          "loanValue": "10000",
+                          "homeValue": "50000"
+                        }
+                        """;
+        String responseJson =  """
+                        {
+                           "feasible": true,
+                           "monthlyCost": 96.56,
+                           "error": ""
+                         }
+                      """;
 
         mockMvc.perform(post("/api/mortgage-check")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -62,8 +82,21 @@ public class MortgageAndInterestRatesControllerTest {
         MortgageResponse mockResponse = new MortgageResponse(false, new BigDecimal("0"), "A Mortgage cannot be more than 4 times the income");
         when(mortgageAndInterestRatesService.checkMortgage(any(MortgageRequest.class))).thenReturn(mockResponse);
 
-        String requestJson = "{\"loanValue\":100000,\"maturityPeriod\":10,\"income\":3000,\"homeValue\":2000000}";
-        String responseJson = "{\"feasible\":false,\"monthlyCost\":0,\"error\":\"A Mortgage cannot be more than 4 times the income\"}";
+        String requestJson = """
+                        {
+                          "income": 100000,
+                          "maturityPeriod": 10,
+                          "loanValue": "3000",
+                          "homeValue": "2000000"
+                        }
+                        """;
+        String responseJson =  """
+                        {
+                           "feasible": false,
+                           "monthlyCost": 0,
+                           "error": "A Mortgage cannot be more than 4 times the income"
+                         }
+                      """;
 
         mockMvc.perform(post("/api/mortgage-check")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -77,8 +110,21 @@ public class MortgageAndInterestRatesControllerTest {
         MortgageResponse mockResponse = new MortgageResponse(false, new BigDecimal("0"), "A Mortgage cannot be more than the home value");
         when(mortgageAndInterestRatesService.checkMortgage(any(MortgageRequest.class))).thenReturn(mockResponse);
 
-        String requestJson = "{\"loanValue\":100000,\"maturityPeriod\":10,\"income\":30000,\"homeValue\":2000}";
-        String responseJson = "{\"feasible\":false,\"monthlyCost\":0,\"error\":\"A Mortgage cannot be more than the home value\"}";
+        String requestJson = """
+                        {
+                          "income": 100000,
+                          "maturityPeriod": 10,
+                          "loanValue": "30000",
+                          "homeValue": "2000"
+                        }
+                        """;
+        String responseJson =  """
+                        {
+                           "feasible": false,
+                           "monthlyCost": 0,
+                           "error": "A Mortgage cannot be more than the home value"
+                         }
+                      """;
 
         mockMvc.perform(post("/api/mortgage-check")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -92,8 +138,21 @@ public class MortgageAndInterestRatesControllerTest {
         MortgageResponse mockResponse = new MortgageResponse(false, new BigDecimal("0"), "No interest rate found for maturity period:: 10");
         when(mortgageAndInterestRatesService.checkMortgage(any(MortgageRequest.class))).thenReturn(mockResponse);
 
-        String requestJson = "{\"loanValue\":10000,\"maturityPeriod\":10,\"income\":30000,\"homeValue\":50000}";
-        String responseJson = "{\"feasible\":false,\"monthlyCost\":0,\"error\":\"No interest rate found for maturity period:: 10\"}";
+        String requestJson = """
+                        {
+                          "income": 30000,
+                          "maturityPeriod": 10,
+                          "loanValue": "10000",
+                          "homeValue": "50000"
+                        }
+                        """;
+        String responseJson =  """
+                        {
+                           "feasible": false,
+                           "monthlyCost": 0,
+                           "error": "No interest rate found for maturity period:: 10"
+                         }
+                      """;
 
         mockMvc.perform(post("/api/mortgage-check")
                         .contentType(MediaType.APPLICATION_JSON)
